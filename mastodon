@@ -11,6 +11,11 @@ upstream streaming {
     server 127.0.0.1:4000 fail_timeout=0;
 }
 
+upstream prometheus {
+    # Prometheus is running on the same host
+    server 127.0.0.1:9090 fail_timeout=0;
+}
+
 proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=CACHE:10m inactive=7d max_size=1g;
 
 server {
@@ -129,6 +134,12 @@ server {
     add_header Strict-Transport-Security "max-age=63072000; includeSubDomains";
 
     tcp_nodelay on;
+  }
+
+  location ~ ^/__prometheus/ {
+    # this forwards requests with URI starting with /__prometheus/
+    # the the prometheus backend defined above
+    proxy_pass http://prometheus;
   }
 
   location @proxy {
