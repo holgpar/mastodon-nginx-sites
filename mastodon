@@ -136,7 +136,7 @@ server {
     tcp_nodelay on;
   }
 
-  location ~ ^/__prometheus/ {
+  location ~ ^/__prometheus {
     # pass on the host name from the request,
     # so that Prometheus can generate consitent URL
     proxy_set_header Host $host;
