@@ -137,6 +137,10 @@ server {
   }
 
   location ~ ^/__prometheus/ {
+    # pass on the host name from the request,
+    # so that Prometheus can generate consitent URL
+    proxy_set_header Host $host;
+
     # this forwards requests with URI starting with /__prometheus/
     # the the prometheus backend defined above
     proxy_pass http://prometheus;
